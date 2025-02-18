@@ -1,0 +1,108 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+}
+
+h2 {
+    color: #4db6ac;
+}
+
+input, button {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: none;
+}
+
+input {
+    background: #333;
+    color: white;
+    border: 1px solid #555;
+}
+
+button {
+    background-color: #4db6ac;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #388e7c;
+}
+
+video {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 2px solid #4db6ac;
+}
+
+#downloadLink {
+    display: none;
+    text-decoration: none;
+    background: #f06292;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+#progress {
+    display: none;
+    font-size: 14px;
+    color: #ffca28;
+    margin-top: 10px;
+}
+@media (max-width: 600px) {
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+    input, button {
+        width: 100%;
+    }
+}
+/* Ensure label and slider are on the same line */
+.label-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+input[type="range"] {
+    width: 70%;
+    margin-left: 10px;
+}
+
+/* Style the time labels */
+span {
+    font-size: 1.1em;
+    margin-left: 10px;
+    min-width: 80px;  /* To ensure space for time format */
+}
+
+
+label {
+    font-size: 1.2em;
+    display: block;
+    margin-top: 10px;
+}

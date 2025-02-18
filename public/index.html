@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silent Video Trimmer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>🎬 Silent Video Trimmer</h2>
+        
+        <!-- Video Upload Section -->
+        <input type="file" id="videoInput" accept="video/*">
+        <div id="errorMessage" style="color: red; display: none;">Please upload a valid video file.</div>
+        
+        <!-- Start and End Time Sliders -->
+        <label>Start Time:</label>
+<div class="label-container">
+    <input type="range" id="startTimeSlider" min="0" value="0" max="1000">
+    <span id="startTimeLabel">00:00:00</span> <!-- Format: HH:MM:SS -->
+</div>
+
+<label>End Time:</label>
+<div class="label-container">
+    <input type="range" id="endTimeSlider" min="0" value="30" max="1000">
+    <span id="endTimeLabel">00:00:30</span> <!-- Format: HH:MM:SS -->
+</div>
+
+        
+
+        <!-- Trim Button -->
+        <button id="trimBtn">✂️ Trim Video</button>
+        <div id="progress" style="display: none;">Processing... ⏳</div>
+ <!-- Download Button (hidden initially) -->
+ <a id="downloadLink" style="display: none;">⬇ Download Trimmed Video</a>
+        <!-- Video Preview -->
+        <video id="videoPreview" controls></video>
+
+       
+    </div>
+
+    <script type="module">
+        import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.0/+esm';
+
+const ffmpeg = createFFmpeg({ log: true });
+const videoInput = document.getElementById('videoInput');
+const trimBtn = document.getElementById('trimBtn');
+const videoPreview = document.getElementById('videoPreview');
+const downloadLink = document.getElementById('downloadLink');
+const progress = document.getElementById('progress');
+const errorMessage = document.getElementById('errorMessage');
+
+// Time Slider Labels
+const startTimeSlider = document.getElementById('startTimeSlider');
+const endTimeSlider = document.getElementById('endTimeSlider');
+const startTimeLabel = document.getElementById('startTimeLabel');
+const endTimeLabel = document.getElementById('endTimeLabel');
+
+// Convert seconds to HH:MM:SS format
+function formatTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const sec = Math.floor(seconds % 60);
+
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+}
+
+// Update labels as sliders move
+startTimeSlider.addEventListener('input', () => {
+    startTimeLabel.textContent = formatTime(startTimeSlider.value);
+});
+endTimeSlider.addEventListener('input', () => {
+    endTimeLabel.textContent = formatTime(endTimeSlider.value);
+});
+
+// Initialize time format on page load
+startTimeLabel.textContent = formatTime(startTimeSlider.value);
+endTimeLabel.textContent = formatTime(endTimeSlider.value);
+
+videoInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const fileSize = file.size;
+        const maxSize = 50 * 1024 * 1024; // 50MB
+        if (fileSize > maxSize) {
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = 'File is too large! Please upload a file smaller than 50MB.';
+            return;
+        }
+        errorMessage.style.display = 'none';
+        videoPreview.src = URL.createObjectURL(file);
+
+        // Load the video to get its duration
+        const videoElement = document.createElement('video');
+        videoElement.src = URL.createObjectURL(file);
+        videoElement.onloadedmetadata = () => {
+            // Set the end time slider's max value to the video's duration (in seconds)
+            const videoDuration = Math.floor(videoElement.duration);
+            endTimeSlider.max = videoDuration;
+
+            // Update the end time label to match the video duration
+            endTimeLabel.textContent = formatTime(videoDuration);
+        };
+    }
+});
+
+trimBtn.addEventListener('click', async () => {
+    const file = videoInput.files[0];
+    const startTime = startTimeSlider.value;
+    const endTime = endTimeSlider.value;
+
+    if (!file || startTime >= endTime) {
+        alert("Invalid input! Check start and end times.");
+        return;
+    }
+
+    // Show progress and hide download button initially
+    progress.style.display = 'block';
+    downloadLink.style.display = 'none';
+    trimBtn.disabled = true; // Disable button while processing
+
+    // Process the video trimming
+    if (!ffmpeg.isLoaded()) await ffmpeg.load();
+    ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(file));
+    await ffmpeg.run('-i', 'input.mp4', '-ss', startTime, '-to', endTime, '-c', 'copy', 'output.mp4');
+
+    const data = ffmpeg.FS('readFile', 'output.mp4');
+    const videoBlob = new Blob([data.buffer], { type: 'video/mp4' });
+    const videoURL = URL.createObjectURL(videoBlob);
+
+    // Set the download link and show it
+    downloadLink.href = videoURL;
+    downloadLink.download = 'trimmed-video.mp4';
+    downloadLink.style.display = 'inline-block';  // Show the download button
+    downloadLink.textContent = '⬇ Download Trimmed Video';
+
+    // Hide progress and re-enable button
+    progress.style.display = 'none';
+    trimBtn.disabled = false;
+});
+
+
+    </script>
+</body>
+</html>
