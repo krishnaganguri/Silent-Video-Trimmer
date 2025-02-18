@@ -79,6 +79,9 @@ video {
     input, button {
         width: 100%;
     }
+    span {
+        font-size: 1em;
+    }
 }
 /* Ensure label and slider are on the same line */
 .label-container {
