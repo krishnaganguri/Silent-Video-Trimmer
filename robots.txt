@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /admin/
+Sitemap: https://silent-video-trimmer.netlify.app/sitemap.xml
