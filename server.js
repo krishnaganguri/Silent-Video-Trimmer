@@ -12,11 +12,11 @@ app.use((req, res, next) => {
 });
 
 // ✅ Serve static files from the "public" folder
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "")));
 
 // ✅ Serve index.html when visiting "/"
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
+    res.sendFile(path.join(__dirname, "", "index.html"));
 });
 
 // ✅ Start server on port 3000
