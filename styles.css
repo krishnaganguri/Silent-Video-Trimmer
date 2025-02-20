@@ -201,3 +201,101 @@ footer {
     padding: 15px;
     margin-top: 20px;
 }
+/* General Mobile Optimization */
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+        padding: 0 10px;
+    }
+
+    h1 {
+        font-size: 6vw; /* Scale dynamically */
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 5vw;
+        text-align: center;
+    }
+
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    /* Fix Video Upload Button */
+    input[type="file"] {
+        width: 100%;
+        max-width: 300px;
+        margin: 10px auto;
+        display: block;
+    }
+
+    /* Fix Buttons */
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    /* Center Progress Indicator */
+    #progress {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    /* Video Player Full Width */
+    video {
+        width: 100%;
+        max-width: 400px;
+        display: block;
+        margin: 10px auto;
+    }
+
+    /* Align "How It Works" Section */
+    #how-it-works {
+        padding: 10px;
+    }
+
+    #how-it-works ol {
+        padding-left: 15px;
+    }
+
+    /* Adjust Spacing for Ads */
+    .adsense-ad {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    /* Footer Adjustments */
+    footer {
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* Further Adjustments for Very Small Screens */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 7vw;
+    }
+
+    h2 {
+        font-size: 5.5vw;
+    }
+
+    button {
+        font-size: 14px;
+    }
+
+    video {
+        max-width: 90%;
+    }
+
+    input[type="file"] {
+        font-size: 14px;
+    }
+}
